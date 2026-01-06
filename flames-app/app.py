@@ -1,15 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 from datetime import datetime
+import os
 
 app = Flask(__name__)
-app.secret_key = "change_this_secret_key"
+app.secret_key = "mysecretkey123"
 
-ADMIN_PASSWORD = "Sai@000"   # change before public use
+ADMIN_PASSWORD = "Sai@000"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "flames.db")
 
 # ---------- DATABASE ----------
 def get_db():
-    return sqlite3.connect("flames.db")
+    return sqlite3.connect(DB_PATH)
 
 def init_db():
     with get_db() as con:
@@ -59,17 +63,15 @@ def calculate_flames(name1, name2):
     return {'text': text, 'color': color, 'emoji': emoji}
 
 # ---------- ROUTES ----------
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST", "HEAD"])
 def index():
     result = None
-
     if request.method == "POST":
         name1 = request.form.get("name1")
         name2 = request.form.get("name2")
 
         if name1 and name2:
             result = calculate_flames(name1, name2)
-
             with get_db() as con:
                 con.execute("""
                 INSERT INTO submissions
@@ -112,7 +114,3 @@ def admin():
 def logout():
     session.clear()
     return redirect(url_for("index"))
-
-# ---------- RUN ----------
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FLAMES Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2 style="text-align:center;">All Submissions</h2>
+
+<table>
+    <tr>
+        <th>Name 1</th>
+        <th>Name 2</th>
+        <th>Result</th>
+    </tr>
+
+    {% for name1, name2, result in submissions %}
+    <tr>
+        <td>{{ name1 }}</td>
+        <td>{{ name2 }}</td>
+        <td style="color: {{ result['color'] }};">
+            {{ result['text'] }} {{ result['emoji'] }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FLAMES Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<a href="/admin" class="admin-btn">ADMIN</a>
+
+<div class="container">
+    <h2>🔥 FLAMES Game</h2>
+
+    <form method="POST">
+        <input type="text" name="name1" placeholder="Your Name" required>
+        <input type="text" name="name2" placeholder="Partner Name" required>
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result %}
+<div class="result-box" style="--result-color: {{ result.color }}">
+    <span class="emoji">{{ result.emoji }}</span>
+    <h3>{{ result.text }}</h3>
+
+    <!-- WhatsApp Share Button -->
+    <a
+      class="whatsapp-btn"
+      href="https://wa.me/?text=🔥%20FLAMES%20Result%20🔥%0A{{ request.form.name1 }}%20❤️%20{{ request.form.name2 }}%0AResult:%20{{ result.text }}%20{{ result.emoji }}%0ATry%20here:%20{{ request.url }}"
+      target="_blank">
+      📲 Share on WhatsApp
+    </a>
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>
